@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadstinger</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+
+
+    <div class='Navbar'>
+        <div class="App">
+            <nav id="navbar">
+                <div class="nav-wrapper">
+
+                    <div class="logo">
+                        <a href="index.html"><i class="fas fa-chess-knight"></i>ROADSTERS</a>
+                    </div>
+
+
+                    <ul id="menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="aboutus.html">About</a></li>
+                    </ul>
+                </div>
+
+            </nav>
+        </div>
+    </div>
+
+
+            <div class="menuIcon">
+                <span class="icon icon-bars"></span>
+                <span class="icon icon-bars overlay"></span>
+            </div>
+
+        <div class='GlassMorphism1'>
+
+            <div>
+                <form>
+                <label class="label" for="customFile">CHOOSE File</label>
+                <input type="file" class="upload" id="customFile" />
+                <button class="label2">Upload File</button>
+                </form>
+            </div>
+            <div class="input-screen">
+            </div>
+        </div>
+        <div class='GlassMorphism2'>
+            <div><a href="#" class="btn material-3"><i class="fa fa-file-download"></i>Output<svg
+                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bidown"
+                        viewBox="0 0 16 16">
+                        <path
+                            d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+                        <path
+                            d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+                    </svg></a>
+            </div>
+
+            <!-- Output screen here-->
+            <div class="Output-screen">
+            </div>
+
+        </div>
+
+        <!--Map Work in this div-->
+        <div class="map" id="map">
+
+        </div>
+
+        <div class="form-container">
+            <form>
+                <label for="longitude">Longitude:</label>
+                <input type="text" id="longitude" name="longitude" placeholder="73.1202">
+
+                <label for="latitude">Latitude:</label>
+                <input type="text" id="latitude" name="latitude" placeholder="19.0016">
+
+                <button type="button" onclick="processCoordinates()">SEARCH</button>
+            </form>
+        </div>
+
+
+        <button onclick="takeScreenshot()" id="screenshot-button">Take Screenshot</button>
+
+
+
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxAKgT6A-zIc1W87HmfR_iH_9cLhgTRgE&callback=initMap"></script>
+
+
+
+        <script src="html2canvas.js"></script>
+        <script>
+
+            function getLatLong() {
+                // Get the values of the latitude and longitude input fields
+                const latitude = document.getElementById('latitude').value;
+                const longitude = document.getElementById('longitude').value;
+
+                // Insert the latitude and longitude values into new variables
+                const newLatitude = parseFloat(latitude);
+                const newLongitude = parseFloat(longitude);
+
+                // Do something with the new latitude and longitude values
+                console.log(`New latitude: ${newLatitude}, New longitude: ${newLongitude}`);
+
+            }
+
+            // Capture screenshot function
+            function takeScreenshot() {
+                // Use html2canvas library to capture the screenshot of the entire document
+                html2canvas(document.body).then(function (canvas) {
+                    // Create a temporary anchor element to download the screenshot
+                    var link = document.createElement('a');
+                    link.download = 'screenshot.png';
+                    link.href = canvas.toDataURL();
+                    // Trigger the download by programmatically clicking the anchor element
+                    link.click();
+                });
+            }
+
+            // Add click event listener to the screenshot button
+            var screenshotButton = document.getElementById('screenshot-button');
+            screenshotButton.addEventListener('click', takeScreenshot);
+
+
+
+
+            function processCoordinates() {
+                const latitude = document.getElementById("latitude").value;
+                const longitude = document.getElementById("longitude").value;
+                showMap(latitude, longitude);
+            }
+
+            function showMap(latitude, longitude) {
+                const mapOptions = {
+                    center: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+                    zoom: 13,
+                    mapTypeId: google.maps.MapTypeId.SATELLITE,
+                };
+                const map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                const marker = new google.maps.Marker({ position: { lat: parseFloat(latitude), lng: parseFloat(longitude) }, map: map });
+            }
+
+            window.onload = function () {
+                const defaultLatitude = 19.0760;
+                const defaultLongitude = 72.8777;
+                const defaultCenter = new google.maps.LatLng(defaultLatitude, defaultLongitude);
+                const mapOptions = {
+                    zoom: 13,
+                    center: defaultCenter,
+                    mapTypeId: google.maps.MapTypeId.SATELLITE,
+                };
+                map = new google.maps.Map(document.getElementById("map"), mapOptions);
+                const marker = new google.maps.Marker({ position: defaultCenter, map: map });
+            };
+        </script>
+
+</body>
+
+</html>
